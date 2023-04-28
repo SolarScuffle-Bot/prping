@@ -58,7 +58,8 @@ app.post('/webhook', async (req, res) => {
 	res.sendStatus(200);
 });
 
-server.listen(0, () => {
-	const port = server.address().port;
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+	// const port = server.address().port;
 	console.log(`Webhook server listening on port ${port}`);
 });
