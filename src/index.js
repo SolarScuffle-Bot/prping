@@ -58,7 +58,11 @@ app.post('/webhook', async (req, res) => {
 			const message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
 			console.log("message", message)
 
-			user.send(message);
+			try {
+				user.send(message)
+			} catch(e) {
+				console.log("CAN'T SEND MESSAGE:", e)
+			};
 		}
 	}
 
