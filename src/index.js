@@ -27,6 +27,10 @@ client.login(botToken);
 
 app.use(bodyParser.json());
 
+app.post('/', (req, res) => {
+	res.send('Hello World!');
+});
+
 app.post('/webhook', async (req, res) => {
 	const payload = req.body;
 
