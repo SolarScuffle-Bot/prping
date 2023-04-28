@@ -1,12 +1,15 @@
 const http = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const Discord = require('discord.js');
+const { Client, GatewayIntentBits } = require('discord.js');
 const app = express();
 const server = http.createServer(app);
 
 const botToken = process.env.BOT_TOKEN;
-const client = new Discord.Client();
+
+const client = new Client({ intents: [
+	GatewayIntentBits.DirectMessages,
+]});
 
 const usernameToDiscordId = {
 	"arcturus-prime": 249653603613016064,
