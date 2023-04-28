@@ -30,6 +30,8 @@ app.use(bodyParser.json());
 app.post('/webhook', async (req, res) => {
 	const payload = req.body;
 
+	console.log(payload)
+
 	if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
 		const {
 			repository,
@@ -38,12 +40,16 @@ app.post('/webhook', async (req, res) => {
 			requested_reviewer
 		} = payload;
 
+		console.log(payload.action)
+
 		// Check if the GitHub username is in the mapping
 		if (usernameToDiscordId.hasOwnProperty(requested_reviewer.login)) {
 			const reviewerDiscordId = usernameToDiscordId[requested_reviewer.login]; // Get the Discord ID from the mapping
 
 			const user = await client.users.fetch(reviewerDiscordId);
+			console.log(user)
 			const message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
+			console.log(message)
 
 			user.send(message);
 		}
