@@ -12,11 +12,11 @@ const client = new Client({ intents: [
 ]});
 
 const usernameToDiscordId = {
-	"arcturus-prime": 249653603613016064,
-	"offad": 389024969234841601,
-	"SolarScuffle-Bot": 864793728879558667,
-	"Sona": 864793728879558667,
-	"PresidentAbdous": 493200017125933056,
+	"arcturus-prime": "249653603613016064",
+	"offad": "389024969234841601",
+	"SolarScuffle-Bot": "864793728879558667",
+	"Sona": "864793728879558667",
+	"PresidentAbdous": "493200017125933056",
 }
 
 client.on('ready', () => {
@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 app.post('/webhook', async (req, res) => {
 	const payload = req.body;
 
-	console.log(payload)
+	console.log("payload", !!payload)
 
 	if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
 		const {
@@ -45,16 +45,18 @@ app.post('/webhook', async (req, res) => {
 			requested_reviewer
 		} = payload;
 
-		console.log(payload.action)
+		console.log("payload.action", !!payload.action)
 
 		// Check if the GitHub username is in the mapping
 		if (usernameToDiscordId.hasOwnProperty(requested_reviewer.login)) {
 			const reviewerDiscordId = usernameToDiscordId[requested_reviewer.login]; // Get the Discord ID from the mapping
+			console.log("reviewerDiscordId", reviewerDiscordId)
 
 			const user = await client.users.fetch(reviewerDiscordId);
-			console.log(user)
+			console.log("user", user)
+
 			const message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
-			console.log(message)
+			console.log("message", message)
 
 			user.send(message);
 		}
