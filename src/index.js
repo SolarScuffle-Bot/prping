@@ -35,41 +35,58 @@ app.get('/', (req, res) => {
 });
 
 app.post('/webhook', async (req, res) => {
-	const payload = req.body;
+    const payload = req.body;
 
-	console.log("payload", !!payload)
+    console.log("payload", !!payload)
 
-	if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
-		const {
-			repository,
-			sender,
-			pull_request,
-			requested_reviewer
-		} = payload;
+    if (payload.action === 'review_requested' || payload.action === 'review_request_removed' || payload.action === 'assigned' || payload.action === 'unassigned') {
+        const {
+            repository,
+            sender,
+            pull_request,
+            issue,
+            assignee
+        } = payload;
 
-		console.log("payload.action", !!payload.action)
+        console.log("payload.action", !!payload.action)
 
-		// Check if the GitHub username is in the mapping
-		if (usernameToDiscordId.hasOwnProperty(requested_reviewer.login)) {
-			const reviewerDiscordId = usernameToDiscordId[requested_reviewer.login]; // Get the Discord ID from the mapping
-			console.log("reviewerDiscordId", reviewerDiscordId)
+        // Check if the GitHub username is in the mapping
+        let userToNotify;
 
-			const user = await client.users.fetch(reviewerDiscordId);
-			console.log("user", user)
+        if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
+            userToNotify = payload.requested_reviewer;
+        } else if (payload.action === 'assigned' || payload.action === 'unassigned') {
+            userToNotify = payload.assignee;
+        }
 
-			const message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
-			console.log("message", message)
+        if (usernameToDiscordId.hasOwnProperty(userToNotify.login)) {
+            const discordId = usernameToDiscordId[userToNotify.login]; // Get the Discord ID from the mapping
+            console.log("discordId", discordId)
 
-			try {
-				user.send(message)
-			} catch(e) {
-				console.log("CAN'T SEND MESSAGE:", e)
-			};
-		}
-	}
+            const user = await client.users.fetch(discordId);
+            console.log("user", user)
 
-	res.sendStatus(200);
+            let message;
+
+            if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
+                message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
+            } else if (payload.action === 'assigned' || payload.action === 'unassigned') {
+                message = `**${sender.login}** has ${payload.action === 'assigned' ? 'assigned' : 'removed'} you from issue **${repository.full_name}#${issue.number}**: ${issue.title}\n${issue.html_url}`;
+            }
+
+            console.log("message", message)
+
+            try {
+                user.send(message)
+            } catch(e) {
+                console.log("CAN'T SEND MESSAGE:", e)
+            };
+        }
+    }
+
+    res.sendStatus(200);
 });
+
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
