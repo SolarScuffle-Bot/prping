@@ -12,13 +12,24 @@ const client = new Client({ intents: [
 ]});
 
 const usernameToDiscordId = {
-	"arcturus-prime": "249653603613016064",
-	"offad": "389024969234841601",
 	"SolarScuffle-Bot": "864793728879558667",
 	"Sona": "864793728879558667",
+
+	"arcturus-prime": "249653603613016064",
+
+	"offad": "389024969234841601",
+
 	"PresidentAbdous": "493200017125933056",
+
 	"MatusGuy": "501130687177293834",
+
 	"Great-Bird": "480395348066697217",
+
+	"Unbox101": "192765933058523136",
+
+	"CluelessD3v": "953186121569951764",
+
+	"gigtih": "861760565559033856",
 }
 
 client.on('ready', () => {
