@@ -17,6 +17,8 @@ const usernameToDiscordId = {
 	"SolarScuffle-Bot": "864793728879558667",
 	"Sona": "864793728879558667",
 	"PresidentAbdous": "493200017125933056",
+	"MatusGuy": "501130687177293834",
+	"Great-Bird": "480395348066697217",
 }
 
 client.on('ready', () => {
