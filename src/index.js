@@ -71,7 +71,7 @@ app.post('/webhook', async (req, res) => {
             if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
                 message = `**${sender.login}** has ${payload.action === 'review_requested' ? 'requested' : 'removed'} your review for pull request **${repository.full_name}#${pull_request.number}**: ${pull_request.title}\n${pull_request.html_url}`;
             } else if (payload.action === 'assigned' || payload.action === 'unassigned') {
-                message = `**${sender.login}** has ${payload.action === 'assigned' ? 'assigned' : 'removed'} you from issue **${repository.full_name}#${issue.number}**: ${issue.title}\n${issue.html_url}`;
+                message = `**${sender.login}** has ${payload.action === 'assigned' ? 'assigned you to' : 'removed you from'} issue **${repository.full_name}#${issue.number}**: ${issue.title}\n${issue.html_url}`;
             }
 
             console.log("message", message)
