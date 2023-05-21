@@ -27,7 +27,7 @@ const usernameToDiscordId = {
 
 	"Unbox101": "192765933058523136",
 
-	"CluelessD3v": "953186121569951764",
+	"CluelessD3v": "695791607932256277",
 
 	"gigtih": "861760565559033856",
 }
@@ -65,8 +65,10 @@ app.post('/webhook', async (req, res) => {
         let userToNotify;
 
         if (payload.action === 'review_requested' || payload.action === 'review_request_removed') {
+            console.log("payload.requested_reviewer", !!payload.requested_reviewer)
             userToNotify = payload.requested_reviewer;
         } else if (payload.action === 'assigned' || payload.action === 'unassigned') {
+            console.log("payload.assignee", !!payload.assignee)
             userToNotify = payload.assignee;
         }
 
