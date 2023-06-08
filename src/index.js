@@ -30,6 +30,8 @@ const usernameToDiscordId = {
 	"CluelessD3v": "695791607932256277",
 
 	"gigtih": "861760565559033856",
+
+    "Aspecky": "276807142810451971",
 }
 
 client.on('ready', () => {
